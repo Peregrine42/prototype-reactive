@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  </head>
+
+  <body>
+    foo<div id="container"><div>No JS</div></div>
+  </body>
+
+  <script src="es5-shim.js"></script>
+  <script src="es5-sham.js"></script>
+  <script src="html5shiv.js"></script>
+  <script src="aight.js"></script>
+  <script src="maquette-polyfills.min.js"></script>
+  <script src="jquery.js"></script>
+  <script src="maquette.js"></script>
+
+  <script>
+    var state = { color: 'red', value: 0 };
+
+    var h = maquette.h;
+    var projector = maquette.createProjector();
+
+    var handleButtonClick = function() {
+      state.value++;
+    }
+
+    var handleTextBoxChange = function(e) {
+      state.color = e.srcElement.value;
+    }
+
+    function renderMaquette() {
+      return h('div#container', [
+        h('div.greeting',
+          [
+            h('span',
+              { styles: { color: state.color } },
+              'Greeting number ' + state.value
+            )
+          ]
+        ),
+        h('div.text',
+          [
+            h('input',
+              {
+                type: "text",
+                value: state.color,
+                onchange: handleTextBoxChange
+              }
+            )
+          ]
+        ),
+        h('div.button',
+          [
+            h('input',
+              {
+                type: "button",
+                value: "inc",
+                onclick: handleButtonClick
+              }
+            )
+          ]
+        )
+      ]);
+    }
+
+    $("body").ready(function() {
+      projector.replace(document.body, renderMaquette);
+    });
+  </script>
+</html>
