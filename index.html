@@ -5,68 +5,44 @@
   </head>
 
   <body>
-    foo<div id="container"><div>No JS</div></div>
+    <div id="container">
+      <span id="counter">0</span>
+      <input type="button" id="inc"></input>
+      <input id="text-input"></input>
+      <span id="text-target"></target>
+    </div>
   </body>
 
   <script src="es5-shim.js"></script>
   <script src="es5-sham.js"></script>
   <script src="html5shiv.js"></script>
   <script src="aight.js"></script>
-  <script src="maquette-polyfills.min.js"></script>
-  <script src="jquery.js"></script>
-  <script src="maquette.js"></script>
+  <script src="prototype.js"></script>
+  <!--<script src="jquery.js"></script>-->
+  <!--<script src="handlebars.js"></script>-->
 
   <script>
-    var state = { color: 'red', value: 0 };
+    var state = { text: "foo", value: 0 };
 
-    var h = maquette.h;
-    var projector = maquette.createProjector();
-
-    var handleButtonClick = function() {
-      state.value++;
-    }
+    var handleButtonClick = function(e) {
+      state.value += 1;
+      render();
+    };
 
     var handleTextBoxChange = function(e) {
-      state.color = e.srcElement.value;
-    }
+      state.text = e.target.value
+      render();
+    };
 
-    function renderMaquette() {
-      return h('div#container', [
-        h('div.greeting',
-          [
-            h('span',
-              { styles: { color: state.color } },
-              'Greeting number ' + state.value
-            )
-          ]
-        ),
-        h('div.text',
-          [
-            h('input',
-              {
-                type: "text",
-                value: state.color,
-                onchange: handleTextBoxChange
-              }
-            )
-          ]
-        ),
-        h('div.button',
-          [
-            h('input',
-              {
-                type: "button",
-                value: "inc",
-                onclick: handleButtonClick
-              }
-            )
-          ]
-        )
-      ]);
-    }
+    var render = function() {
+      $("counter").update(state.value)
+      $("text-target").update(state.text)
+      $("text-input").setValue(state.text)
+    };
 
-    $("body").ready(function() {
-      projector.replace(document.body, renderMaquette);
-    });
+    $("inc").observe("click", handleButtonClick);
+    $("text-input").observe("keyup", handleTextBoxChange);
+
+    render();
   </script>
 </html>
